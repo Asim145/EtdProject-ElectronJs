@@ -1,11 +1,26 @@
 #my_form{
-
     padding: 2%;
     margin: 2%;
 
 }
 #my_btn_div{
     float: right;
+    margin-right: 0%;
+    padding-right: 0%;
+    background-color: brown;
+}
+#btncancel{
+    float: right;
+    margin-right: 0%;
+    width: 60px;
+    height: 40px;
+}
+.tbl tr th{
+    text-align: center;
+}
+.tbl tr td{
+    text-align: center;
+    padding-left: 5%;
 }
 #etd{
     text-align: center;
@@ -19,12 +34,9 @@ body{
     justify-content: center;
     align-items: center;
 }
-#description{
-    padding: 0%;
-}
 ::-webkit-scrollbar {
     width: 0px;
-    background: transparent; /* make scrollbar transparent */
+    background: transparent;  
 }
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     transform:scale(1.03,1.03);
@@ -34,4 +46,23 @@ body{
   .table tr th{
     background-color: rgb(105, 107, 114);
     color: white;
+  }
+
+#title_header{
+    text-align: center;
+    font-size: 25px;
+    top: 0;
+}
+.window {
+    height: 1000px; 
+    overflow: hidden; 
+  }
+  
+  .scrollable  {
+    overflow: scroll;
+    height: 100%;
+  }
+  
+  body{
+    overflow: hidden;
   }

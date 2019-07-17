@@ -19,7 +19,7 @@ function createTable(productData) {
 
     for (var i = 0; i < productData.length; i++) {
 
-        var newRow = table.insertRow(1);
+        var newRow = table.insertRow(0);
 
         var cel1 = newRow.insertCell(0);
         var cel2 = newRow.insertCell(1);
