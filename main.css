@@ -9,7 +9,7 @@
 }
 #etd{
     text-align: center;
-    color: #4e4e4e;
+    color: white;
     justify-content: center;
     align-items: center;
     margin-top: 25%
@@ -22,3 +22,16 @@ body{
 #description{
     padding: 0%;
 }
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    transform:scale(1.03,1.03);
+    transform-origin:center;
+    transition: 300ms
+  }
+  .table tr th{
+    background-color: rgb(105, 107, 114);
+    color: white;
+  }

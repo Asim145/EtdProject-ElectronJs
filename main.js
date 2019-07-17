@@ -8,32 +8,39 @@ const {
     Menu,
     ipcMain
 } = electron;
+let mainwindow, addOrderWindow, addProductWindow, addCustomerWindow, viewProductsWindow, viewCustomersWindow,processingOrderWindow, deliveredOrderWindow, deliveredAndPaidOrderWindow;
 
-let mainwindow, addOrderWindow, addProductWindow, addCustomerWindow, viewProductsWindow, viewCustomersWindow, deliveredOrderWindow, deliveredAndPaidOrderWindow;
+//Set Envoirenment for Production Mode//
+//process.env.NODE_ENV = 'production'
+
 //--------------------- Main Window -------------------//
-function createMainWindow() {
+function createMain() {
     mainwindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Processing Order',
+        title: 'Expert-Tech Dental Lab',
         webPreferences: {
             nodeIntegration: true
         },
+        backgroundColor: '#2e2c29',
+        show: false,
+        frame: false,
+        minWidth: 800,
+        minHeight: 620,
+
     });
     mainwindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainwindow.html'),
+        pathname: path.join(__dirname, 'main.html'),
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers(mainwindow);
-    getProducts(mainwindow);
-    getUnderProcessOrders(mainwindow);
+    mainwindow.once('ready-to-show', () => {
+        mainwindow.show() //to prevent the white screen when loading the window, lets show it when it is ready
+    })
 }
 
 //-------------------- For Windows ---------------------------//
 app.on('ready', () => {
     if (mainwindow == null) {
-        createMainWindow();
+        createMain();
         menu();
     }
 });
@@ -45,7 +52,7 @@ app.on('closed', () => {
 //---------------------- For Mac -----------------------------//
 app.on('activate', () => {
     if (mainwindow == null) {
-        createMainWindow();
+        createMain();
         menu();
     }
 });
@@ -66,7 +73,7 @@ const mainMenuTemplate = [{
             {
                 label: 'Processing Orders', //order to be delivered
                 click() {
-                    createMainWindow();
+                    createProcessingOrderWindow();
                 }
             },
             {
@@ -174,12 +181,15 @@ if (process.env.NODE_ENV !== 'production') {
 // createAddProductWindow
 function createAddProductWindow() {
     addProductWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 400,
+        height: 200,
         webPreferences: {
             nodeIntegration: true
         },
-        frame: false
+        frame: false,
+        parent: mainwindow,
+        resizable: false,
+        modal: true
     });
     addProductWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'addProductWindow.html'),
@@ -191,11 +201,14 @@ function createAddProductWindow() {
 function createAddCustomerWindow() {
     addCustomerWindow = new BrowserWindow({
         width: 800,
-        height: 600,
+        height: 310,
         webPreferences: {
             nodeIntegration: true
         },
-        frame: false
+        frame: false,
+        parent: mainwindow,
+        resizable: false,
+        modal: true
     });
     addCustomerWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'addCustomerWindow.html'),
@@ -207,11 +220,14 @@ function createAddCustomerWindow() {
 function craeteAddOrderWindow() {
     addOrderWindow = new BrowserWindow({
         width: 800,
-        height: 600,
+        height: 540,
         webPreferences: {
             nodeIntegration: true
         },
-        frame: false
+        frame: false,
+        parent: mainwindow,
+        resizable: false,
+        modal: true
     });
     addOrderWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'addOrderWindow.html'),
@@ -230,6 +246,8 @@ function createViewProductsWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        frame: false,
+        fullscreen: true
     });
     viewProductsWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'viewProductsWindow.html'),
@@ -247,6 +265,8 @@ function createRecordProductsWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        frame: false,
+        fullscreen: true
     });
     recordProductsWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'viewProductsWindow.html'),
@@ -264,6 +284,8 @@ function createViewCustomersWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        frame: false,
+        fullscreen: true
     });
     viewCustomersWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'viewCustomersWindow.html'),
@@ -281,6 +303,8 @@ function createRecordCustomersWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        frame: false,
+        fullscreen: true
     });
     recordCustomersWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'viewCustomersWindow.html'),
@@ -289,6 +313,32 @@ function createRecordCustomersWindow() {
     }))
     getRecordCustomers(recordCustomersWindow);
 }
+//createProcessingOrderWindow
+function  createProcessingOrderWindow() {
+    processingOrderWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        title: 'Processing Order',
+        webPreferences: {
+            nodeIntegration: true
+        },
+        show: false,
+        frame: false,
+        fullscreen: true
+    });
+    processingOrderWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'mainwindow.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
+    processingOrderWindow.once('ready-to-show', () => {
+        processingOrderWindow.show() //to prevent the white screen when loading the window, lets show it when it is ready
+    })
+    getCustomers(processingOrderWindow);
+    getProducts(processingOrderWindow);
+    getUnderProcessOrders(processingOrderWindow);
+}
+
 //createDeliveredOrderWindow
 function createDeliveredOrderWindow() {
     deliveredOrderWindow = new BrowserWindow({
@@ -298,6 +348,8 @@ function createDeliveredOrderWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        frame: false,
+        fullscreen: true
     });
     deliveredOrderWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainwindow.html'),
@@ -317,6 +369,8 @@ function createDeliveredAndPaidOrderWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        frame: false,
+        fullscreen: true
     });
     deliveredAndPaidOrderWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainwindow.html'),
@@ -336,6 +390,8 @@ function createDeliveredButNotPaidOrderWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        frame: false,
+        fullscreen: true
     });
     deliveredButNotPaidOrderWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainwindow.html'),

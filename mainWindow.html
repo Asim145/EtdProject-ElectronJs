@@ -3,13 +3,18 @@
 
 <head>
     <title></title>
+    <link rel='stylesheet' type='text/css' media='screen' href='./main.css'>
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
+
+    <div id="my_btn_div">
+        <button id="btncancel" class="btn btn-danger">×</button>
+    </div>
     <div class="table-responsive">
-        <table id="orderTable" class="table table-striped" style="margin: 1%">
+        <table id="orderTable" class="table table-hover" style="margin: 1%">
             <tr>
                 <th>
                     Order ID
@@ -55,7 +60,6 @@
     </div>
 
     <script src="./scripts/mainWindow.js">
-
     </script>
 
 </body>

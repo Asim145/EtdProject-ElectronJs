@@ -2,13 +2,13 @@ const electron = require('electron')
 const {
     ipcRenderer
 } = electron;
-const remote = require('electron').remote;
 
+const remote = require('electron').remote;
 document.getElementById('btncancel').addEventListener('click', function (e) {
     var window = remote.getCurrentWindow();
     window.close();
 })
-console.log('test')
+
 const form = document.querySelector('form');
 form.addEventListener('submit', submitForm);
 

@@ -3,6 +3,12 @@ const {
     ipcRenderer
 } = electron;
 
+const remote = require('electron').remote;
+document.getElementById('btncancel').addEventListener('click', function (e) {
+    var window = remote.getCurrentWindow();
+    window.close();
+})
+
 var customerData = [];
 var productData = [];
 customerData = ipcRenderer.sendSync('customer_data');
