@@ -1,0 +1,24 @@
+#my_form{
+
+    padding: 2%;
+    margin: 2%;
+
+}
+#my_btn_div{
+    float: right;
+}
+#etd{
+    text-align: center;
+    color: #4e4e4e;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25%
+    
+}
+body{
+    justify-content: center;
+    align-items: center;
+}
+#description{
+    padding: 0%;
+}

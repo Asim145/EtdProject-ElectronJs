@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <link rel='stylesheet' type='text/css' media='screen' href='./main.css'>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+
+    <div id="my_form">
+        <form action="" class="form">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">Customer name<span style="color:red">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter Customer's name" id="customer_name"
+                        required autofocus/>
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">Organization name</label>
+                    <input type="text" class="form-control" placeholder="Enter Customer's Organization name" id="customer_organization" />
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">Customer Contact no.</label>
+                    <input type="number" class="form-control" placeholder="Enter Customer's Contact no." id="customer_contact" />
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">Customer Address</label>
+                    <input type="text" class="form-control" placeholder="Enter Customer's Address" id="customer_address" />
+                </div>
+            </div>
+            <br>
+            <div id="my_btn_div">
+                <button type="submit" class="btn btn-primary">Add</button>
+                <button id="btncancel" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script>
+        require("./scripts/addCustomer.js")
+</script>
+
+
+</html>
