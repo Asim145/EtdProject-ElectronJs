@@ -3,13 +3,6 @@ const {
     ipcRenderer
 } = electron;
 
-// To Close The Current Window
-const remote = require('electron').remote;
-document.getElementById('btncancel').addEventListener('click', function (e) {
-    var window = remote.getCurrentWindow();
-    window.close();
-})
-
 ipcRenderer.on('real_customer_ready', (event, customerData) => {
     createTable(customerData);
 })
