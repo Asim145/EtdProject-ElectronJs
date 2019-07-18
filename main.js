@@ -192,7 +192,7 @@ function createAddProductWindow() {
         modal: true
     });
     addProductWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'addProductWindow.html'),
+        pathname: path.join(__dirname, './views/addProductWindow.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -211,7 +211,7 @@ function createAddCustomerWindow() {
         modal: true
     });
     addCustomerWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'addCustomerWindow.html'),
+        pathname: path.join(__dirname, './views/addCustomerWindow.html'),
         protocol: 'file:',
         slashes: true,
     }))
@@ -230,7 +230,7 @@ function craeteAddOrderWindow() {
         modal: true
     });
     addOrderWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'addOrderWindow.html'),
+        pathname: path.join(__dirname, './views/addOrderWindow.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -240,9 +240,6 @@ function craeteAddOrderWindow() {
 // createViewProductsWindow
 function createViewProductsWindow() {
     viewProductsWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Active Products',
         webPreferences: {
             nodeIntegration: true
         },
@@ -250,7 +247,7 @@ function createViewProductsWindow() {
         fullscreen: true
     });
     viewProductsWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'viewProductsWindow.html'),
+        pathname: path.join(__dirname, './views/viewProductsWindow.html'),
         protocol: 'file:',
         slashes: true,
     }))
@@ -259,9 +256,6 @@ function createViewProductsWindow() {
 // createRecordProductsWindow
 function createRecordProductsWindow() {
     recordProductsWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Products Record',
         webPreferences: {
             nodeIntegration: true
         },
@@ -269,7 +263,7 @@ function createRecordProductsWindow() {
         fullscreen: true
     });
     recordProductsWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'viewProductsWindow.html'),
+        pathname: path.join(__dirname, './views/productsRecordWindow.html'),
         protocol: 'file:',
         slashes: true,
     }))
@@ -278,9 +272,6 @@ function createRecordProductsWindow() {
 // createViewCustomersWindow
 function createViewCustomersWindow() {
     viewCustomersWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Active Customers',
         webPreferences: {
             nodeIntegration: true
         },
@@ -288,7 +279,7 @@ function createViewCustomersWindow() {
         fullscreen: true
     });
     viewCustomersWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'viewCustomersWindow.html'),
+        pathname: path.join(__dirname, './views/viewCustomersWindow.html'),
         protocol: 'file:',
         slashes: true,
     }))
@@ -297,9 +288,6 @@ function createViewCustomersWindow() {
 //createRecordCustomersWindow
 function createRecordCustomersWindow() {
     recordCustomersWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Customers Record',
         webPreferences: {
             nodeIntegration: true
         },
@@ -307,7 +295,7 @@ function createRecordCustomersWindow() {
         fullscreen: true
     });
     recordCustomersWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'viewCustomersWindow.html'),
+        pathname: path.join(__dirname, './views/customersRecordWindow.html'),
         protocol: 'file:',
         slashes: true,
     }))
@@ -316,9 +304,6 @@ function createRecordCustomersWindow() {
 //createProcessingOrderWindow
 function  createProcessingOrderWindow() {
     processingOrderWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Processing Order',
         webPreferences: {
             nodeIntegration: true
         },
@@ -327,7 +312,7 @@ function  createProcessingOrderWindow() {
         fullscreen: true
     });
     processingOrderWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainwindow.html'),
+        pathname: path.join(__dirname, './views/processingOrderWindow.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -352,7 +337,7 @@ function createDeliveredOrderWindow() {
         fullscreen: true
     });
     deliveredOrderWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainwindow.html'),
+        pathname: path.join(__dirname, './views/deliveredOrderWindow.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -373,7 +358,7 @@ function createDeliveredAndPaidOrderWindow() {
         fullscreen: true
     });
     deliveredAndPaidOrderWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainwindow.html'),
+        pathname: path.join(__dirname, './views/deliveredAndPaidOrderWindow.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -394,7 +379,7 @@ function createDeliveredButNotPaidOrderWindow() {
         fullscreen: true
     });
     deliveredButNotPaidOrderWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainwindow.html'),
+        pathname: path.join(__dirname, './views/deliveredButNotPaidOrderWindow.html'),
         protocol: 'file:',
         slashes: true
     }))

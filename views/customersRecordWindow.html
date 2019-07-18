@@ -3,17 +3,17 @@
 
 <head>
     <title></title>
-    <link rel='stylesheet' type='text/css' media='screen' href='./main.css'>
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='../main.css'>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
     <div class="window">
         <div id="title_header">
-            Active Customers
-            <div id="my_btn_div">
-                <button id="btncancel" class="btn btn-danger">×</button>
+            Customers Record
+            <div id="my_btn_div" class=" btnclosediv">
+                <button id="btncancel" class="btn btn-danger btnclose">×</button>
             </div>
         </div>
         <div class="table-responsive" id="tbldiv">
@@ -43,16 +43,16 @@
                     </tr>
             </table>
         </div>
-        <div class="table-responsive scrollable" id="tbldiv">
+        <div class="table-responsive scrollable">
                 <table id="productTable" class="table table-hover tbl">
                  
                 </table>
-            </div>
+        </div>
     </div>
 
 </body>
 <script>
-    require('./scripts/viewCustomers.js')
+    require('../scripts/viewCustomers.js')
 </script>
 
 
