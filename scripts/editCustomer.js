@@ -9,13 +9,18 @@ document.getElementById('btncancel').addEventListener('click', function (e) {
     remote.getCurrentWindow().close();
 })
 
-ipcRenderer.on('selected_product', function (e, data) {
-    document.getElementById('product_name').value = data.product_name;
+ipcRenderer.on('selected_customer', function (e, data) {
+    document.getElementById('customer_name').value = data.customer_name;
+    document.getElementById('customer_organization').value = data.customer_organization;
+    document.getElementById('customer_contact').value = data.customer_contact;
+    document.getElementById('customer_address').value = data.customer_address;
     var isactive = document.getElementById('isactive');
     if(data.isactive == "N"){
         isactive.options[1].selected = true;
     }
 })
+
+
 
 const form = document.querySelector('form');
 form.addEventListener('submit', submitForm);
@@ -26,7 +31,10 @@ function submitForm(e) {
     ipcRenderer.send('data');
     ipcRenderer.on('le_data', function (e, data) {
 
-        const product_name = (document.querySelector('#product_name').value).trim();
+        const customer_name = (document.querySelector('#customer_name').value).trim();
+        const customer_organization = (document.querySelector('#customer_organization').value).trim();
+        const customer_contact = (document.querySelector('#customer_contact').value).trim();
+        const customer_address = (document.querySelector('#customer_address').value).trim();
         //---------------------Database-----------------------------//
         var mysql = require('mysql');
 
@@ -46,21 +54,26 @@ function submitForm(e) {
                 console.log(err.fatal);
             }
         });
-        var product_id = data.product_id;
+        var customer_id = data.customer_id;
         var isactive;
         var selected_status = document.getElementById('isactive');
         isactive = selected_status.options[selected_status.selectedIndex].text;
         
         //objetct of data
         const pdata = [
-            product_name,isactive,product_id
+            customer_name,
+            customer_organization,
+            customer_contact,
+            customer_address,
+            isactive,
+            customer_id
         ];
         console.log("---------------------------------")
         console.log(pdata)
         console.log("---------------------------------")
 
         // Perform a query
-        $query = 'UPDATE `products` SET product_name = ?, isactive = ? WHERE product_id = ?';
+        $query = 'UPDATE `customers` SET customer_name=?,customer_organization=?,customer_contact=?,customer_address=?,isactive=? WHERE customer_id = ?';
 
         connection.query($query, pdata, function (err, rows, fields) {
             if (err) {
@@ -76,8 +89,8 @@ function submitForm(e) {
         connection.end(function () {
             // The connection has been closed
         });
-        
-        remote.getCurrentWindow().reload();
+
+        //remote.getCurrentWindow().reload();
 
     })
 

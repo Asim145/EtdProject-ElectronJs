@@ -41,10 +41,16 @@ function createTable(orderData, customerData, productData) {
         var cel12 = newRow.insertCell(11);
         var cel13 = newRow.insertCell(12);
 
-        var btnUpdate = document.createElement('button');
-        btnUpdate.innerHTML = "Update";
-
         var order = orderData[i];
+
+        var btnUpdate = document.createElement('button');
+        btnUpdate.innerHTML = "Edit";
+        btnUpdate.classList.add("btn");
+        btnUpdate.classList.add("btn-info");
+        btnUpdate.id = "btnEdit"
+        btnUpdate.value = order.order_id;
+
+        
         var status;
         if (order.ispending == 'Y') {
             status = "Pending";
@@ -89,4 +95,20 @@ function createTable(orderData, customerData, productData) {
         cel12.innerHTML = status;
         cel13.appendChild(btnUpdate);
     }
+
+    var btns = document.querySelectorAll('#btnEdit');
+
+    Array.prototype.forEach.call(btns, function addClickListener(btn) {
+        btn.addEventListener('click', function (event) {
+            // code here to handle click
+            for (var i = 0; i < orderData.length; i++) {
+
+                if(btn.value == orderData[i].order_id)
+                {
+                    ipcRenderer.send('edit_order',orderData[i]);
+                }
+
+            }
+        });
+    });
 }

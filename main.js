@@ -10,7 +10,8 @@ const {
 } = electron;
 let mainwindow, addOrderWindow, addProductWindow, addCustomerWindow,
     viewProductsWindow, viewCustomersWindow,processingOrderWindow, deliveredOrderWindow, deliveredAndPaidOrderWindow,
-    editProductWindow;
+    recordProductsWindow,
+    editProductWindow,editCustomerWindow,editOrderrWindow;
 
 //Set Envoirenment for Production Mode//
 //process.env.NODE_ENV = 'production'
@@ -737,6 +738,7 @@ function getRecordCustomers(getWindow) {
 
 /*-------------------- Update Windows ----------------*/
 
+//??????????????????? Edit Product Window ????????????????????????//
 ipcMain.on('edit_product', function(event, data){
     editProductWindow = new BrowserWindow({
         width: 400,
@@ -744,9 +746,9 @@ ipcMain.on('edit_product', function(event, data){
         webPreferences: {
             nodeIntegration: true
         },
-        backgroundColor: '#2e2c29',
         frame: false,
         parent: viewProductsWindow,
+        alwaysOnTop: true,
         resizable: false,
         modal: true
     });
@@ -761,7 +763,61 @@ ipcMain.on('edit_product', function(event, data){
     ipcMain.on('data',function(e ,args){
         e.sender.send('le_data', data)
         data = null;
-    
     })
+})
 
+//??????????????????? Edit Customer Window ????????????????????????//
+ipcMain.on('edit_customer', function(event, data){
+    editCustomerWindow = new BrowserWindow({
+        width: 800,
+        height: 380,
+        webPreferences: {
+            nodeIntegration: true
+        },
+        frame: false,
+        parent: viewCustomersWindow,
+        alwaysOnTop: true,
+        resizable: false,
+        modal: true
+    });
+    editCustomerWindow.loadURL(url.format({
+        pathname: path.join(__dirname, './views/editCustomerWindow.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
+    editCustomerWindow.webContents.on('did-finish-load', () => {
+        editCustomerWindow.webContents.send('selected_customer', data)
+    })
+    ipcMain.on('data',function(e ,args){
+        e.sender.send('le_data', data)
+        data = null;
+    })
+})
+
+//??????????????????? Edit Order Window ????????????????????????//
+ipcMain.on('edit_order', function(event, data){
+    editOrderrWindow = new BrowserWindow({
+        width: 400,
+        height: 300,
+        webPreferences: {
+            nodeIntegration: true
+        },
+        frame: false,
+        parent: processingOrderWindow,
+        alwaysOnTop: true,
+        resizable: false,
+        modal: true
+    });
+    editOrderrWindow.loadURL(url.format({
+        pathname: path.join(__dirname, './views/editOrderrWindow.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
+    editOrderrWindow.webContents.on('did-finish-load', () => {
+        editOrderrWindow.webContents.send('selected_order', data)
+    })
+    ipcMain.on('data',function(e ,args){
+        e.sender.send('le_data', data)
+        data = null;
+    })
 })

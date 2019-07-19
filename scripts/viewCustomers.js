@@ -28,10 +28,16 @@ function createTable(customerData) {
         var cel6 = newRow.insertCell(5);
         var cel7 = newRow.insertCell(6);
 
-        var btnUpdate = document.createElement('button');
-        btnUpdate.innerHTML = "Update";
-
         var opt = customerData[i];
+
+        var btnUpdate = document.createElement('button');
+        btnUpdate.innerHTML = "Edit";
+        btnUpdate.classList.add("btn");
+        btnUpdate.classList.add("btn-info");
+        btnUpdate.id = "btnEdit"
+        btnUpdate.value = opt.customer_id;
+
+        
         cel1.innerHTML = opt.customer_id;
         cel2.innerHTML = opt.customer_name;
         cel3.innerHTML = opt.customer_organization;
@@ -40,4 +46,20 @@ function createTable(customerData) {
         cel6.innerHTML = opt.isactive;
         cel7.appendChild(btnUpdate);
     }
+
+    var btns = document.querySelectorAll('#btnEdit');
+
+    Array.prototype.forEach.call(btns, function addClickListener(btn) {
+        btn.addEventListener('click', function (event) {
+            // code here to handle click
+            for (var i = 0; i < customerData.length; i++) {
+
+                if(btn.value == customerData[i].customer_id)
+                {
+                    ipcRenderer.send('edit_customer',customerData[i]);
+                }
+
+            }
+        });
+    });
 }
