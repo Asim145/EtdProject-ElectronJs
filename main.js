@@ -8,7 +8,9 @@ const {
     Menu,
     ipcMain
 } = electron;
-let mainwindow, addOrderWindow, addProductWindow, addCustomerWindow, viewProductsWindow, viewCustomersWindow,processingOrderWindow, deliveredOrderWindow, deliveredAndPaidOrderWindow;
+let mainwindow, addOrderWindow, addProductWindow, addCustomerWindow,
+    viewProductsWindow, viewCustomersWindow,processingOrderWindow, deliveredOrderWindow, deliveredAndPaidOrderWindow,
+    editProductWindow;
 
 //Set Envoirenment for Production Mode//
 //process.env.NODE_ENV = 'production'
@@ -594,25 +596,6 @@ function getDeliveredButNotPaidOrders(getWindow) {
         // The connection has been closed
     });
 }
-
-//--------------------------------------------------------------------------------------//
-//try to reload customer
-ipcMain.on('reload_customer', function (e, args) {
-    addCustomerWindow.close();
-    createAddCustomerWindow();
-})
-//try to reload product
-ipcMain.on('reload_product', function (e, args) {
-    addProductWindow.close();
-    createAddProductWindow();
-})
-//try to reload order
-ipcMain.on('reload_order', function (e, args) {
-    addOrderWindow.close();
-    craeteAddOrderWindow();
-})
-//-----------------------------------------------------------------------------------------//
-
 //????????????????Getting Real Customers?????????????????//
 function getRealCustomers(getWindow) {
     // Add the credentials to access your database
@@ -674,6 +657,7 @@ function getRealProducts(getWindow) {
         }
         getWindow.webContents.on('did-finish-load', () => {
             getWindow.webContents.send('real_product_ready', rows)
+            getWindow.webContents.send('real_product_for_btn', rows)
         })
     });
     // Close the connection
@@ -749,3 +733,35 @@ function getRecordCustomers(getWindow) {
         // The connection has been closed
     });
 }
+
+
+/*-------------------- Update Windows ----------------*/
+
+ipcMain.on('edit_product', function(event, data){
+    editProductWindow = new BrowserWindow({
+        width: 400,
+        height: 300,
+        webPreferences: {
+            nodeIntegration: true
+        },
+        backgroundColor: '#2e2c29',
+        frame: false,
+        parent: viewProductsWindow,
+        resizable: false,
+        modal: true
+    });
+    editProductWindow.loadURL(url.format({
+        pathname: path.join(__dirname, './views/editProductWindow.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
+    editProductWindow.webContents.on('did-finish-load', () => {
+    editProductWindow.webContents.send('selected_product', data)
+    })
+    ipcMain.on('data',function(e ,args){
+        e.sender.send('le_data', data)
+        data = null;
+    
+    })
+
+})

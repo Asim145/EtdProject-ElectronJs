@@ -76,5 +76,5 @@ function submitForm(e) {
         // The connection has been closed
     });
 
-    ipcRenderer.send('reload_customer', 'ping');
+    remote.getCurrentWindow().reload();
 }
