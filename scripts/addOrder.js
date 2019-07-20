@@ -2,12 +2,12 @@ const electron = require('electron')
 const {
     ipcRenderer
 } = electron;
+var mysql = require('mysql');
 
 // To Close The Current Window
 const remote = require('electron').remote;
 document.getElementById('btncancel').addEventListener('click', function (e) {
-    var window = remote.getCurrentWindow();
-    window.close();
+    remote.getCurrentWindow().close();
 })
 
 // Getting The Fields
@@ -19,12 +19,7 @@ var orderDate = document.querySelector('#order_date');
 var deliverDate = document.querySelector('#deliver_date');
 var desc = document.querySelector('#description');
 
-
-
-var customerData = [];
-var productData = [];
-customerData = ipcRenderer.sendSync('customer_data');
-productData = ipcRenderer.sendSync('product_data');
+function forCustomer(customerData){
 // To populate Customers
 for (var i = 0; i < customerData.length; i++) {
     var opt = customerData[i];
@@ -32,7 +27,9 @@ for (var i = 0; i < customerData.length; i++) {
     el.textContent = opt.customer_name;
     el.value = opt.customer_id;
     customer.appendChild(el);
-}
+}}
+function forProduct(productData){
+
 // To populate Products
 for (var i = 0; i < productData.length; i++) {
     var opt = productData[i];
@@ -41,7 +38,7 @@ for (var i = 0; i < productData.length; i++) {
     el.value = opt.product_id;
     product.appendChild(el);
 }
-
+}
 // To submit Form
 const form = document.querySelector('form');
 form.addEventListener('submit', submitForm);
@@ -87,7 +84,7 @@ function submitForm(e) {
         description: description
     }
     //---------------------Database-----------------------------//
-    var mysql = require('mysql');
+    
 
     // Add the credentials to access your database
     var connection = mysql.createConnection({
@@ -125,3 +122,70 @@ function submitForm(e) {
     });
     remote.getCurrentWindow().reload();
 }
+//????????????????Getting Active Customers?????????????????//
+function getCustomers(callback) {
+    // Add the credentials to access your database
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: null, // or the original password : 'apaswword'
+        database: 'etddatabase'
+    });
+    // connect to mysql
+    connection.connect(function (err) {
+        // in case of error
+        if (err) {
+            console.log(err.code);
+            console.log(err.fatal);
+        }
+    });
+    // query for Active Customers
+    $query = 'SELECT * FROM `customers` WHERE isactive="Y"';
+    connection.query($query, function (err, rows, fields) {
+        if (err) {
+            console.log("An error ocurred performing the query.");
+            console.log(err);
+            return;
+        }
+        callback(rows);
+    });
+    // Close the connection
+    connection.end(function () {
+        // The connection has been closed
+    });
+}
+//???????????????????Getting Active Products????????????????????//
+function getProducts(callback) {
+    // Add the credentials to access your database
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: null, // or the original password : 'apaswword'
+        database: 'etddatabase'
+    });
+    // connect to mysql
+    connection.connect(function (err) {
+        // in case of error
+        if (err) {
+            console.log(err.code);
+            console.log(err.fatal);
+        }
+    });
+    // query for Active products
+    $query = 'SELECT * FROM `products` WHERE isactive="Y"';
+    connection.query($query, function (err, rows, fields) {
+        if (err) {
+            console.log("An error ocurred performing the query.");
+            console.log(err);
+            return;
+        }
+        callback(rows)
+    });
+    // Close the connection
+    connection.end(function () {
+        // The connection has been closed
+    });
+}
+ 
+ getProducts(forProduct);
+ getCustomers(forCustomer);

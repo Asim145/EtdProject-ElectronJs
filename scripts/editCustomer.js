@@ -15,36 +15,30 @@ ipcRenderer.on('selected_customer', function (e, data) {
     if (data.customer_organization == "N/A") {
         organization.value = "";
     } else {
-        organization = data.customer_organization;
+        organization.value = data.customer_organization;
     }
     document.getElementById('customer_contact').value = data.customer_contact;
     var address = document.getElementById('customer_address');
     if (data.customer_address == "N/A") {
         address.value = "";
     } else {
-        address = data.customer_address;
+        address.value = data.customer_address;
     }
     var isactive = document.getElementById('isactive');
     if (data.isactive == "N") {
         isactive.options[1].selected = true;
     }
-})
 
+    const form = document.querySelector('form');
+    form.addEventListener('submit', submitForm);
 
+    function submitForm(e) {
+        e.preventDefault();
 
-const form = document.querySelector('form');
-form.addEventListener('submit', submitForm);
-
-function submitForm(e) {
-    e.preventDefault();
-
-    ipcRenderer.send('data');
-    ipcRenderer.on('le_data', function (e, data) {
-
-        const customer_name = (document.querySelector('#customer_name').value).trim();
-        const customer_organization = (document.querySelector('#customer_organization').value).trim();
-        const customer_contact = (document.querySelector('#customer_contact').value).trim();
-        const customer_address = (document.querySelector('#customer_address').value).trim();
+        var customer_name = (document.querySelector('#customer_name').value).trim();
+        var customer_organization = (document.querySelector('#customer_organization').value).trim();
+        var customer_contact = (document.querySelector('#customer_contact').value).trim();
+        var customer_address = (document.querySelector('#customer_address').value).trim();
 
         if (customer_organization == "" || customer_organization == null) {
             customer_organization = "N/A"
@@ -107,7 +101,7 @@ function submitForm(e) {
         });
 
         remote.getCurrentWindow().reload();
+    }
 
-    })
 
-}
+})

@@ -80,19 +80,13 @@ const mainMenuTemplate = [{
                 }
             },
             {
-                label: 'Delivered Orders',
-                click() {
-                    createDeliveredOrderWindow();
-                }
-            },
-            {
-                label: 'UnPaid Orders', //Delivered but not paid
+                label: 'Delivered not Paid', //Delivered but not paid
                 click() {
                     createDeliveredButNotPaidOrderWindow();
                 }
             },
             {
-                label: 'Paid Orders(Record)', //Delivered & Paid
+                label: 'Delivered & Paid', //Delivered & Paid
                 click() {
                     createDeliveredAndPaidOrderWindow();
                 }
@@ -237,8 +231,6 @@ function craeteAddOrderWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers(addOrderWindow);
-    getProducts(addOrderWindow);
 }
 // createViewProductsWindow
 function createViewProductsWindow() {
@@ -254,7 +246,6 @@ function createViewProductsWindow() {
         protocol: 'file:',
         slashes: true,
     }))
-    getRealProducts(viewProductsWindow);
 }
 // createRecordProductsWindow
 function createRecordProductsWindow() {
@@ -270,7 +261,6 @@ function createRecordProductsWindow() {
         protocol: 'file:',
         slashes: true,
     }))
-    getRecordProducts(recordProductsWindow);
 }
 // createViewCustomersWindow
 function createViewCustomersWindow() {
@@ -286,7 +276,6 @@ function createViewCustomersWindow() {
         protocol: 'file:',
         slashes: true,
     }))
-    getRealCustomers(viewCustomersWindow);
 }
 //createRecordCustomersWindow
 function createRecordCustomersWindow() {
@@ -302,7 +291,6 @@ function createRecordCustomersWindow() {
         protocol: 'file:',
         slashes: true,
     }))
-    getRecordCustomers(recordCustomersWindow);
 }
 //createProcessingOrderWindow
 function  createProcessingOrderWindow() {
@@ -322,9 +310,6 @@ function  createProcessingOrderWindow() {
     processingOrderWindow.once('ready-to-show', () => {
         processingOrderWindow.show() //to prevent the white screen when loading the window, lets show it when it is ready
     })
-    getCustomers();
-    getProducts();
-    getUnderProcessOrders(processingOrderWindow);
 }
 
 //createDeliveredOrderWindow
@@ -344,9 +329,6 @@ function createDeliveredOrderWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers();
-    getProducts();
-    getDeliveredOrders(deliveredOrderWindow);
 }
 //createDeliveredAndPaidOrderWindow
 function createDeliveredAndPaidOrderWindow() {
@@ -365,9 +347,6 @@ function createDeliveredAndPaidOrderWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers();
-    getProducts();
-    getDeliveredAndPaidOrders(deliveredAndPaidOrderWindow);
 }
 //createDeliveredButNotPaidOrderWindow
 function createDeliveredButNotPaidOrderWindow() {
@@ -386,47 +365,11 @@ function createDeliveredButNotPaidOrderWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers();
-    getProducts();
-    getDeliveredButNotPaidOrders(deliveredButNotPaidOrderWindow);
 }
 
 //---------------------Database-----------------------------//
 
-//????????????????Getting Active Customers?????????????????//
-function getCustomers() {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for Active Customers
-    $query = 'SELECT * FROM `customers` WHERE isactive="Y"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        ipcMain.on('customer_data', function (e) {
-            e.returnValue = rows;
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
+
 //????????????????Getting All Customers?????????????????//
 function getAllCustomers() {
     // Add the credentials to access your database
@@ -461,40 +404,7 @@ function getAllCustomers() {
         // The connection has been closed
     });
 }
-//???????????????????Getting Active Products????????????????????//
-function getProducts() {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for Active products
-    $query = 'SELECT * FROM `products` WHERE isactive="Y"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        ipcMain.on('product_data', function (e) {
-            e.returnValue = rows;
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
+
 //???????????????????Getting All Products????????????????????//
 function getAllProducts() {
     // Add the credentials to access your database
@@ -529,283 +439,7 @@ function getAllProducts() {
         // The connection has been closed
     });
 }
-//??????????????????Getting Under Process Order?????????????????//
-function getUnderProcessOrders(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase',
-        timezone: 'utc'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for processing orders
-    $query = 'SELECT * FROM `orders` WHERE deliver_date="0000-00-00"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('order_ready', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-//??????????????????Getting Delivered Order?????????????????//
-function getDeliveredOrders(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase',
-        timezone: 'utc'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for delivered orders
-    $query = 'SELECT * FROM `orders` WHERE deliver_date!="0000-00-00"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('order_ready', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-//??????????????????????Getting Delivered And Paid Orders????????????????//
-function getDeliveredAndPaidOrders(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase',
-        timezone: 'utc'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for Delivered And Paid Orders
-    $query = 'SELECT * FROM `orders` WHERE deliver_date!="0000-00-00" AND ispending="N"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('order_ready', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-//????????????????????Getting Delivered But Not Paid Orders????????????????//
-function getDeliveredButNotPaidOrders(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase',
-        timezone: 'utc'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for Delivered But Not Paid Orders
-    $query = 'SELECT * FROM `orders` WHERE deliver_date!="0000-00-00" AND ispending="Y"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('order_ready', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-//????????????????Getting Real Customers?????????????????//
-function getRealCustomers(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for customers
-    $query = 'SELECT * FROM `customers` WHERE isactive="Y"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('real_customer_ready', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-//???????????????????Getting Real Products????????????????????//
-function getRealProducts(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for products
-    $query = 'SELECT * FROM `products` WHERE isactive="Y"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('real_product_ready', rows)
-            getWindow.webContents.send('real_product_for_btn', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-//???????????????????Getting Record Products????????????????????//
-function getRecordProducts(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for products Record
-    $query = 'SELECT * FROM `products` WHERE isactive="N"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('real_product_ready', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-//????????????????Getting Record Customers?????????????????//
-function getRecordCustomers(getWindow) {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for Record Customers
-    $query = 'SELECT * FROM `customers` WHERE isactive="N"';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        getWindow.webContents.on('did-finish-load', () => {
-            getWindow.webContents.send('real_customer_ready', rows)
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
+
 
 
 /*-------------------- Update Windows ----------------*/
@@ -832,10 +466,6 @@ ipcMain.on('edit_product', function(event, data){
     editProductWindow.webContents.on('did-finish-load', () => {
     editProductWindow.webContents.send('selected_product', data)
     })
-    ipcMain.on('data',function(e ,args){
-        e.sender.send('le_data', data)
-        data = null;
-    })
 })
 
 //??????????????????? Edit Customer Window ????????????????????????//
@@ -859,10 +489,6 @@ ipcMain.on('edit_customer', function(event, data){
     }))
     editCustomerWindow.webContents.on('did-finish-load', () => {
         editCustomerWindow.webContents.send('selected_customer', data)
-    })
-    ipcMain.on('data',function(e ,args){
-        e.sender.send('le_data', data)
-        data = null;
     })
 })
 
@@ -889,9 +515,5 @@ ipcMain.on('edit_order', function(event, data){
     getAllProducts();
     editOrderrWindow.webContents.on('did-finish-load', () => {
         editOrderrWindow.webContents.send('selected_order', data)
-    })
-    ipcMain.on('data',function(e ,args){
-        e.sender.send('le_data', data)
-        data = null;
     })
 })

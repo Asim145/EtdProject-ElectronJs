@@ -2,16 +2,20 @@ const electron = require('electron')
 const {
     ipcRenderer
 } = electron;
-const mysql = require('mysql')
 const remote = require('electron').remote;
+const mysql  = require('mysql')
+const main = remote.require('./main.js')
+
 document.getElementById('btncancel').addEventListener('click', function (e) {
-    remote.getCurrentWindow().close();
+    var window = remote.getCurrentWindow();
+    window.close();
 })
 
-function forCustomer(customerData) {
-    var table = document.getElementById("productTable")
+var table = document.getElementById("productTable")
 
-    for (var i = 0; i < customerData.length; i++) {
+function forProducts(productData) {
+
+    for (var i = 0; i < productData.length; i++) {
 
         var newRow = table.insertRow(0);
 
@@ -19,27 +23,21 @@ function forCustomer(customerData) {
         var cel2 = newRow.insertCell(1);
         var cel3 = newRow.insertCell(2);
         var cel4 = newRow.insertCell(3);
-        var cel5 = newRow.insertCell(4);
-        var cel6 = newRow.insertCell(5);
-        var cel7 = newRow.insertCell(6);
 
-        var opt = customerData[i];
+        var opt = productData[i];
 
         var btnUpdate = document.createElement('button');
         btnUpdate.innerHTML = "Edit";
         btnUpdate.classList.add("btn");
         btnUpdate.classList.add("btn-info");
         btnUpdate.id = "btnEdit"
-        btnUpdate.value = opt.customer_id;
+        btnUpdate.value = opt.product_id;
 
 
-        cel1.innerHTML = opt.customer_id;
-        cel2.innerHTML = opt.customer_name;
-        cel3.innerHTML = opt.customer_organization;
-        cel4.innerHTML = opt.customer_contact;
-        cel5.innerHTML = opt.customer_address;
-        cel6.innerHTML = opt.isactive;
-        cel7.appendChild(btnUpdate);
+        cel1.innerHTML = opt.product_id;
+        cel2.innerHTML = opt.product_name;
+        cel3.innerHTML = opt.isactive;
+        cel4.appendChild(btnUpdate);
     }
 
     var btns = document.querySelectorAll('#btnEdit');
@@ -47,20 +45,24 @@ function forCustomer(customerData) {
     Array.prototype.forEach.call(btns, function addClickListener(btn) {
         btn.addEventListener('click', function (event) {
             // code here to handle click
-            for (var i = 0; i < customerData.length; i++) {
+            for (var i = 0; i < productData.length; i++) {
 
-                if (btn.value == customerData[i].customer_id) {
-                    ipcRenderer.send('edit_customer', customerData[i]);
+                if(btn.value == productData[i].product_id)
+                {
+                    ipcRenderer.send('edit_product',productData[i]);
                 }
 
             }
         });
     });
 
+
 }
 
-//????????????????Getting Real Customers?????????????????//
-function getCustomers(forCustomer) {
+
+
+//???????????????????Getting Real Products????????????????????//
+function getProducts(forProducts) {
     // Add the credentials to access your database
     var connection = mysql.createConnection({
         host: 'localhost',
@@ -76,15 +78,15 @@ function getCustomers(forCustomer) {
             console.log(err.fatal);
         }
     });
-    // query for customers
-    $query = 'SELECT * FROM `customers` WHERE isactive="Y"';
+    // query for products
+    $query = 'SELECT * FROM `products` WHERE isactive="N"';
     connection.query($query, function (err, rows, fields) {
         if (err) {
             console.log("An error ocurred performing the query.");
             console.log(err);
             return;
         }
-        forCustomer(rows)
+        forProducts(rows);
     });
     // Close the connection
     connection.end(function () {
@@ -92,4 +94,4 @@ function getCustomers(forCustomer) {
     });
 }
 
-getCustomers(forCustomer);
+getProducts(forProducts);

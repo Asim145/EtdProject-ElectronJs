@@ -77,7 +77,7 @@ function getCustomers(forCustomer) {
         }
     });
     // query for customers
-    $query = 'SELECT * FROM `customers` WHERE isactive="Y"';
+    $query = 'SELECT * FROM `customers` WHERE isactive="N"';
     connection.query($query, function (err, rows, fields) {
         if (err) {
             console.log("An error ocurred performing the query.");

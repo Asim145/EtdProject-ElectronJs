@@ -3,7 +3,7 @@ const {
     ipcRenderer
 } = electron;
 const remote = require('electron').remote;
-
+const mysql  = require('mysql')
 const main = remote.require('./main.js')
 
 document.getElementById('btncancel').addEventListener('click', function (e) {
@@ -11,12 +11,9 @@ document.getElementById('btncancel').addEventListener('click', function (e) {
     window.close();
 })
 
-ipcRenderer.on('real_product_ready', (event, productData) => {
-    createTable(productData);
-})
 var table = document.getElementById("productTable")
 
-function createTable(productData) {
+function forProducts(productData) {
 
     for (var i = 0; i < productData.length; i++) {
 
@@ -61,3 +58,40 @@ function createTable(productData) {
 
 
 }
+
+
+
+//???????????????????Getting Real Products????????????????????//
+function getProducts(forProducts) {
+    // Add the credentials to access your database
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: null, // or the original password : 'apaswword'
+        database: 'etddatabase'
+    });
+    // connect to mysql
+    connection.connect(function (err) {
+        // in case of error
+        if (err) {
+            console.log(err.code);
+            console.log(err.fatal);
+        }
+    });
+    // query for products
+    $query = 'SELECT * FROM `products` WHERE isactive="Y"';
+    connection.query($query, function (err, rows, fields) {
+        if (err) {
+            console.log("An error ocurred performing the query.");
+            console.log(err);
+            return;
+        }
+        forProducts(rows);
+    });
+    // Close the connection
+    connection.end(function () {
+        // The connection has been closed
+    });
+}
+
+getProducts(forProducts);

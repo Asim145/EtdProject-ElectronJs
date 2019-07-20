@@ -12,31 +12,28 @@ document.getElementById('btncancel').addEventListener('click', function (e) {
 ipcRenderer.on('selected_product', function (e, data) {
     document.getElementById('product_name').value = data.product_name;
     var isactive = document.getElementById('isactive');
-    if(data.isactive == "N"){
+    if (data.isactive == "N") {
         isactive.options[1].selected = true;
     }
-})
 
-const form = document.querySelector('form');
-form.addEventListener('submit', submitForm);
 
-function submitForm(e) {
-    e.preventDefault();
+    const form = document.querySelector('form');
+    form.addEventListener('submit', submitForm);
 
-    ipcRenderer.send('data');
-    ipcRenderer.on('le_data', function (e, data) {
+    function submitForm(e) {
+        e.preventDefault();
 
         const product_name = (document.querySelector('#product_name').value).trim();
-        
+
 
         var product_id = data.product_id;
         var isactive;
         var selected_status = document.getElementById('isactive');
         isactive = selected_status.options[selected_status.selectedIndex].text;
-        
+
         //objetct of data
         const pdata = [
-            product_name,isactive,product_id
+            product_name, isactive, product_id
         ];
         //---------------------Database-----------------------------//
         var mysql = require('mysql');
@@ -76,6 +73,6 @@ function submitForm(e) {
         
         remote.getCurrentWindow().reload();
 
-    })
+    }
 
-}
+})

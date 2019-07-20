@@ -74,17 +74,12 @@ ipcRenderer.on('selected_order', function (e, selectedOrder) {
     if (selectedOrder.ispending == "N") {
         isactive.options[1].selected = true;
     }
-})
 
+    const form = document.querySelector('form');
+    form.addEventListener('submit', submitForm);
 
-const form = document.querySelector('form');
-form.addEventListener('submit', submitForm);
-
-function submitForm(e) {
-    e.preventDefault();
-
-    ipcRenderer.send('data');
-    ipcRenderer.on('le_data', function (e, data) {
+    function submitForm(e) {
+        e.preventDefault();
 
         var order_id = data.order_id;
 
@@ -174,7 +169,5 @@ function submitForm(e) {
         });
 
         remote.getCurrentWindow().reload();
-
-    })
-
-}
+    }
+})
