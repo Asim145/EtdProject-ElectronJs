@@ -47,7 +47,7 @@ function createTable(orderData, customerData, productData) {
         btnUpdate.innerHTML = "Edit";
         btnUpdate.classList.add("btn");
         btnUpdate.classList.add("btn-info");
-        btnUpdate.id = "btnEdit"
+        btnUpdate.id = "btnEdit";
         btnUpdate.value = order.order_id;
 
         
@@ -86,8 +86,8 @@ function createTable(orderData, customerData, productData) {
         cel3.innerHTML = product_name;
         cel4.innerHTML = order.shade;
         cel5.innerHTML = order.price;
-        cel6.innerHTML = order.order_date;
-        cel7.innerHTML = order.deliver_date;
+        cel6.innerHTML = order.order_date.split('T')[0];
+        cel7.innerHTML = order.deliver_date.split('T')[0];
         cel8.innerHTML = customer_organization;
         cel9.innerHTML = customer_contact;
         cel10.innerHTML = customer_address;

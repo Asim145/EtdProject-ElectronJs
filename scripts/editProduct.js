@@ -27,6 +27,17 @@ function submitForm(e) {
     ipcRenderer.on('le_data', function (e, data) {
 
         const product_name = (document.querySelector('#product_name').value).trim();
+        
+
+        var product_id = data.product_id;
+        var isactive;
+        var selected_status = document.getElementById('isactive');
+        isactive = selected_status.options[selected_status.selectedIndex].text;
+        
+        //objetct of data
+        const pdata = [
+            product_name,isactive,product_id
+        ];
         //---------------------Database-----------------------------//
         var mysql = require('mysql');
 
@@ -37,7 +48,6 @@ function submitForm(e) {
             password: null, // or the original password : 'apaswword'
             database: 'etddatabase'
         });
-
         // connect to mysql
         connection.connect(function (err) {
             // in case of error
@@ -46,19 +56,6 @@ function submitForm(e) {
                 console.log(err.fatal);
             }
         });
-        var product_id = data.product_id;
-        var isactive;
-        var selected_status = document.getElementById('isactive');
-        isactive = selected_status.options[selected_status.selectedIndex].text;
-        
-        //objetct of data
-        const pdata = [
-            product_name,isactive,product_id
-        ];
-        console.log("---------------------------------")
-        console.log(pdata)
-        console.log("---------------------------------")
-
         // Perform a query
         $query = 'UPDATE `products` SET product_name = ?, isactive = ? WHERE product_id = ?';
 

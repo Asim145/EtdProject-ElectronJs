@@ -18,6 +18,22 @@ function submitForm(e) {
     var customer_organization = (document.querySelector('#customer_organization').value).trim();
     var customer_address = (document.querySelector('#customer_address').value).trim();
     var customer_contact = (document.querySelector('#customer_contact').value).trim();
+    if(customer_organization == "" || customer_organization == null){
+        customer_organization = "N/A"
+    }
+    if(customer_address == "" || customer_address == null){
+        customer_address = "N/A"
+    }
+    if(customer_contact == "" || customer_contact == null){
+        customer_contact = "N/A"
+    }
+    //objetct of data 
+    const cdata = {
+        customer_name: customer_name,
+        customer_organization: customer_organization,
+        customer_address: customer_address,
+        customer_contact: customer_contact
+    }
     
     //---------------------Database-----------------------------//
     var mysql = require('mysql');
@@ -29,7 +45,6 @@ function submitForm(e) {
         password: null, // or the original password : 'apaswword'
         database: 'etddatabase'
     });
-
     // connect to mysql
     connection.connect(function (err) {
         // in case of error
@@ -38,27 +53,6 @@ function submitForm(e) {
             console.log(err.fatal);
         }
     });
-    if(customer_organization == "" || customer_organization == null){
-        customer_organization = "N/A"
-    }
-    if(customer_address == "" || customer_address == null){
-        customer_address = "N/A"
-    }
-    if(customer_contact == "" || customer_contact == null){
-        customer_contact = "N/A"
-    }
-
-    //objetct of data 
-    const cdata = {
-        customer_name: customer_name,
-        customer_organization: customer_organization,
-        customer_address: customer_address,
-        customer_contact: customer_contact
-    }
-    console.log("---------------------------------")
-    console.log(cdata)
-    console.log("---------------------------------")
-
     // Perform a query
     $query = 'INSERT INTO `customers` SET ?';
 

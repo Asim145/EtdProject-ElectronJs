@@ -18,6 +18,11 @@ function submitForm(e) {
     const product_name = (document.querySelector('#product_name').value).trim();
 
 
+    //objetct of data 
+    const pdata = {
+        product_name: product_name
+    }
+
     //---------------------Database-----------------------------//
     var mysql = require('mysql');
 
@@ -37,11 +42,6 @@ function submitForm(e) {
             console.log(err.fatal);
         }
     });
-
-    //objetct of data 
-    const pdata = {
-        product_name: product_name
-    }
     console.log("---------------------------------")
     console.log(pdata)
     console.log("---------------------------------")

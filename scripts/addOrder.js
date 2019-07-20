@@ -76,6 +76,16 @@ function submitForm(e) {
         description = (desc.value).trim();
     }
 
+    //objetct of data 
+    const cdata = {
+        customer_id: customer_id,
+        product_id: product_id,
+        shade: Selected_shade,
+        price: price,
+        order_date: order_date,
+        deliver_date: deliver_date,
+        description: description
+    }
     //---------------------Database-----------------------------//
     var mysql = require('mysql');
 
@@ -95,21 +105,6 @@ function submitForm(e) {
             console.log(err.fatal);
         }
     });
-
-    //objetct of data 
-    const cdata = {
-
-        customer_id: customer_id,
-        product_id: product_id,
-        shade: Selected_shade,
-        price: price,
-        order_date: order_date,
-        deliver_date: deliver_date,
-        description: description
-    }
-    console.log("---------------------------------")
-    console.log(cdata)
-    console.log("---------------------------------")
 
     // Perform a query
     $query = 'INSERT INTO `orders` SET ?';

@@ -322,8 +322,8 @@ function  createProcessingOrderWindow() {
     processingOrderWindow.once('ready-to-show', () => {
         processingOrderWindow.show() //to prevent the white screen when loading the window, lets show it when it is ready
     })
-    getCustomers(processingOrderWindow);
-    getProducts(processingOrderWindow);
+    getCustomers();
+    getProducts();
     getUnderProcessOrders(processingOrderWindow);
 }
 
@@ -344,8 +344,8 @@ function createDeliveredOrderWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers(deliveredOrderWindow);
-    getProducts(deliveredOrderWindow);
+    getCustomers();
+    getProducts();
     getDeliveredOrders(deliveredOrderWindow);
 }
 //createDeliveredAndPaidOrderWindow
@@ -365,8 +365,8 @@ function createDeliveredAndPaidOrderWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers(deliveredAndPaidOrderWindow);
-    getProducts(deliveredAndPaidOrderWindow);
+    getCustomers();
+    getProducts();
     getDeliveredAndPaidOrders(deliveredAndPaidOrderWindow);
 }
 //createDeliveredButNotPaidOrderWindow
@@ -386,15 +386,15 @@ function createDeliveredButNotPaidOrderWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    getCustomers(deliveredButNotPaidOrderWindow);
-    getProducts(deliveredButNotPaidOrderWindow);
+    getCustomers();
+    getProducts();
     getDeliveredButNotPaidOrders(deliveredButNotPaidOrderWindow);
 }
 
 //---------------------Database-----------------------------//
 
-//????????????????Getting All Customers?????????????????//
-function getCustomers(getWindow) {
+//????????????????Getting Active Customers?????????????????//
+function getCustomers() {
     // Add the credentials to access your database
     var connection = mysql.createConnection({
         host: 'localhost',
@@ -427,8 +427,42 @@ function getCustomers(getWindow) {
         // The connection has been closed
     });
 }
-//???????????????????Getting All Products????????????????????//
-function getProducts(getWindow) {
+//????????????????Getting All Customers?????????????????//
+function getAllCustomers() {
+    // Add the credentials to access your database
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: null, // or the original password : 'apaswword'
+        database: 'etddatabase'
+    });
+    // connect to mysql
+    connection.connect(function (err) {
+        // in case of error
+        if (err) {
+            console.log(err.code);
+            console.log(err.fatal);
+        }
+    });
+    // query for Active Customers
+    $query = 'SELECT * FROM `customers`';
+    connection.query($query, function (err, rows, fields) {
+        if (err) {
+            console.log("An error ocurred performing the query.");
+            console.log(err);
+            return;
+        }
+        ipcMain.on('all_customer_data', function (e) {
+            e.returnValue = rows;
+        })
+    });
+    // Close the connection
+    connection.end(function () {
+        // The connection has been closed
+    });
+}
+//???????????????????Getting Active Products????????????????????//
+function getProducts() {
     // Add the credentials to access your database
     var connection = mysql.createConnection({
         host: 'localhost',
@@ -461,6 +495,40 @@ function getProducts(getWindow) {
         // The connection has been closed
     });
 }
+//???????????????????Getting All Products????????????????????//
+function getAllProducts() {
+    // Add the credentials to access your database
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: null, // or the original password : 'apaswword'
+        database: 'etddatabase'
+    });
+    // connect to mysql
+    connection.connect(function (err) {
+        // in case of error
+        if (err) {
+            console.log(err.code);
+            console.log(err.fatal);
+        }
+    });
+    // query for Active products
+    $query = 'SELECT * FROM `products`';
+    connection.query($query, function (err, rows, fields) {
+        if (err) {
+            console.log("An error ocurred performing the query.");
+            console.log(err);
+            return;
+        }
+        ipcMain.on('all_product_data', function (e) {
+            e.returnValue = rows;
+        })
+    });
+    // Close the connection
+    connection.end(function () {
+        // The connection has been closed
+    });
+}
 //??????????????????Getting Under Process Order?????????????????//
 function getUnderProcessOrders(getWindow) {
     // Add the credentials to access your database
@@ -468,7 +536,8 @@ function getUnderProcessOrders(getWindow) {
         host: 'localhost',
         user: 'root',
         password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
+        database: 'etddatabase',
+        timezone: 'utc'
     });
     // connect to mysql
     connection.connect(function (err) {
@@ -502,7 +571,8 @@ function getDeliveredOrders(getWindow) {
         host: 'localhost',
         user: 'root',
         password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
+        database: 'etddatabase',
+        timezone: 'utc'
     });
     // connect to mysql
     connection.connect(function (err) {
@@ -536,7 +606,8 @@ function getDeliveredAndPaidOrders(getWindow) {
         host: 'localhost',
         user: 'root',
         password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
+        database: 'etddatabase',
+        timezone: 'utc'
     });
     // connect to mysql
     connection.connect(function (err) {
@@ -570,7 +641,8 @@ function getDeliveredButNotPaidOrders(getWindow) {
         host: 'localhost',
         user: 'root',
         password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
+        database: 'etddatabase',
+        timezone: 'utc'
     });
     // connect to mysql
     connection.connect(function (err) {
@@ -797,8 +869,8 @@ ipcMain.on('edit_customer', function(event, data){
 //??????????????????? Edit Order Window ????????????????????????//
 ipcMain.on('edit_order', function(event, data){
     editOrderrWindow = new BrowserWindow({
-        width: 400,
-        height: 300,
+        width: 800,
+        height: 600,
         webPreferences: {
             nodeIntegration: true
         },
@@ -809,10 +881,12 @@ ipcMain.on('edit_order', function(event, data){
         modal: true
     });
     editOrderrWindow.loadURL(url.format({
-        pathname: path.join(__dirname, './views/editOrderrWindow.html'),
+        pathname: path.join(__dirname, './views/editOrderWindow.html'),
         protocol: 'file:',
         slashes: true
     }))
+    getAllCustomers();
+    getAllProducts();
     editOrderrWindow.webContents.on('did-finish-load', () => {
         editOrderrWindow.webContents.send('selected_order', data)
     })
