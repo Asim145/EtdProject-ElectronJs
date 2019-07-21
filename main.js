@@ -9,9 +9,9 @@ const {
     ipcMain
 } = electron;
 let mainwindow, addOrderWindow, addProductWindow, addCustomerWindow,
-    viewProductsWindow, viewCustomersWindow,processingOrderWindow, deliveredOrderWindow, deliveredAndPaidOrderWindow,
+    viewProductsWindow, viewCustomersWindow, processingOrderWindow, deliveredOrderWindow, deliveredAndPaidOrderWindow,
     recordProductsWindow,
-    editProductWindow,editCustomerWindow,editOrderrWindow;
+    editProductWindow, editCustomerWindow, editOrderrWindow;
 
 //Set Envoirenment for Production Mode//
 process.env.NODE_ENV = 'production'
@@ -31,7 +31,7 @@ function createMain() {
 
     });
     mainwindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'main.html'),
+        pathname: path.join(__dirname, 'mainWindow.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -140,12 +140,16 @@ const mainMenuTemplate = [{
     {
         label: 'Exit',
         submenu: [{
-            label: 'Quit',
-            accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
-            click() {
-                app.quit();
+                role: 'reload'
+            },
+            {
+                label: 'Quit',
+                accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+                click() {
+                    app.quit();
+                }
             }
-        }]
+        ]
     }
 ]
 //------------------- For mac first object is empty ---------------------//
@@ -162,16 +166,12 @@ if (process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
         label: 'Developer Tools',
         submenu: [{
-                label: 'Toggle DevTools',
-                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
-                click(item, focusedWindow) {
-                    focusedWindow.toggleDevTools();
-                }
-            },
-            {
-                role: 'reload'
+            label: 'Toggle DevTools',
+            accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+            click(item, focusedWindow) {
+                focusedWindow.toggleDevTools();
             }
-        ]
+        }]
     })
 }
 //---------------------------------Windows-------------------------------------//
@@ -293,7 +293,7 @@ function createRecordCustomersWindow() {
     }))
 }
 //createProcessingOrderWindow
-function  createProcessingOrderWindow() {
+function createProcessingOrderWindow() {
     processingOrderWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true
@@ -370,7 +370,7 @@ function createDeliveredButNotPaidOrderWindow() {
 /*-------------------- Update Windows ----------------*/
 
 //??????????????????? Edit Product Window ????????????????????????//
-ipcMain.on('edit_product', function(event, data){
+ipcMain.on('edit_product', function (event, data) {
     editProductWindow = new BrowserWindow({
         width: 400,
         height: 300,
@@ -389,12 +389,12 @@ ipcMain.on('edit_product', function(event, data){
         slashes: true
     }))
     editProductWindow.webContents.on('did-finish-load', () => {
-    editProductWindow.webContents.send('selected_product', data)
+        editProductWindow.webContents.send('selected_product', data)
     })
 })
 
 //??????????????????? Edit Customer Window ????????????????????????//
-ipcMain.on('edit_customer', function(event, data){
+ipcMain.on('edit_customer', function (event, data) {
     editCustomerWindow = new BrowserWindow({
         width: 800,
         height: 380,
@@ -418,7 +418,7 @@ ipcMain.on('edit_customer', function(event, data){
 })
 
 //??????????????????? Edit Order Window ????????????????????????//
-ipcMain.on('edit_order', function(event, data){
+ipcMain.on('edit_order', function (event, data) {
     editOrderrWindow = new BrowserWindow({
         width: 800,
         height: 600,
