@@ -14,7 +14,7 @@ let mainwindow, addOrderWindow, addProductWindow, addCustomerWindow,
     editProductWindow,editCustomerWindow,editOrderrWindow;
 
 //Set Envoirenment for Production Mode//
-//process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'production'
 
 //--------------------- Main Window -------------------//
 function createMain() {
@@ -367,81 +367,6 @@ function createDeliveredButNotPaidOrderWindow() {
     }))
 }
 
-//---------------------Database-----------------------------//
-
-
-//????????????????Getting All Customers?????????????????//
-function getAllCustomers() {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for Active Customers
-    $query = 'SELECT * FROM `customers`';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        ipcMain.on('all_customer_data', function (e) {
-            e.returnValue = rows;
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-
-//???????????????????Getting All Products????????????????????//
-function getAllProducts() {
-    // Add the credentials to access your database
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
-    });
-    // connect to mysql
-    connection.connect(function (err) {
-        // in case of error
-        if (err) {
-            console.log(err.code);
-            console.log(err.fatal);
-        }
-    });
-    // query for Active products
-    $query = 'SELECT * FROM `products`';
-    connection.query($query, function (err, rows, fields) {
-        if (err) {
-            console.log("An error ocurred performing the query.");
-            console.log(err);
-            return;
-        }
-        ipcMain.on('all_product_data', function (e) {
-            e.returnValue = rows;
-        })
-    });
-    // Close the connection
-    connection.end(function () {
-        // The connection has been closed
-    });
-}
-
-
-
 /*-------------------- Update Windows ----------------*/
 
 //??????????????????? Edit Product Window ????????????????????????//
@@ -511,8 +436,6 @@ ipcMain.on('edit_order', function(event, data){
         protocol: 'file:',
         slashes: true
     }))
-    getAllCustomers();
-    getAllProducts();
     editOrderrWindow.webContents.on('did-finish-load', () => {
         editOrderrWindow.webContents.send('selected_order', data)
     })

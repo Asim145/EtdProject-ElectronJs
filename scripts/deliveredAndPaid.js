@@ -197,7 +197,8 @@ function getOrder(forOrder) {
         host: 'localhost',
         user: 'root',
         password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
+        database: 'etddatabase',
+       // timezone: 'utc'
     });
     // connect to mysql
     connection.connect(function (err) {

@@ -83,8 +83,14 @@ function forOrder(orderData) {
                 cel3.innerHTML = product_name;
                 cel4.innerHTML = order.shade;
                 cel5.innerHTML = order.price;
-                cel6.innerHTML = order.order_date//.split(' ')[0];
-                cel7.innerHTML = order.deliver_date;
+                function convert(str) {
+                    var date = new Date(str),
+                      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                      day = ("0" + date.getDate()).slice(-2);
+                    return [date.getFullYear(), mnth, day].join("-");
+                  }
+                cel6.innerHTML = convert(order.order_date);//.split(' ')[0];
+                cel7.innerHTML = convert(order.deliver_date);
                 cel8.innerHTML = customer_organization;
                 cel9.innerHTML = customer_contact;
                 cel10.innerHTML = customer_address;
@@ -197,7 +203,8 @@ function getOrder(forOrder) {
         host: 'localhost',
         user: 'root',
         password: null, // or the original password : 'apaswword'
-        database: 'etddatabase'
+        database: 'etddatabase',
+       // timeZone: "utc"
     });
     // connect to mysql
     connection.connect(function (err) {
@@ -208,7 +215,7 @@ function getOrder(forOrder) {
         }
     });
     // query for processing orders
-    $query1 = 'SELECT * FROM `orders` WHERE deliver_date!="0000-00-00" AND ispending="Y"';
+    $query1 = 'SELECT * FROM `orders` WHERE order_date!="0000-00-00" AND deliver_date!="0000-00-00" AND ispending="Y"';
     connection.query($query1, function (err, rows, fields) {
         if (err) {
             console.log("An error ocurred performing the query.");
